@@ -1,0 +1,1332 @@
+{
+	"info": {
+		"_postman_id": "89805840-e1c1-4a77-a2f0-75aac11cf919",
+		"name": "Library Store",
+		"description": "## Quick Start\n1. **Fork the collection** - Click the **Run in Postman** button to fork the collection to your own workspace.\n\n  [![Run in Postman](https://run.pstmn.io/button.svg)](https://god.gw.postman.com/run-collection/13455110-3b9b9b98-2a3f-47c0-a257-ae869f69ce05?action=collection%2Ffork&collection-url=entityId%3D13455110-3b9b9b98-2a3f-47c0-a257-ae869f69ce05%26entityType%3Dcollection%26workspaceId%3D152199ce-48dd-4b46-b201-9e4fcb6f75db)\n2. **Select the first folder** - Begin with the first folder labeled \"Library API Reference\", and expand the documentation from the context bar on the right. Instructions for each lesson will be in the documentation for each folder\n\n## Postman: An Introduction for Developers\n##### aired **September 8, 2021**\n[<img src=\"https://i.imgur.com/sAdL1kU.png\">](https://www.youtube.com/watch?v=GUgA9mgSwrg)\n\n**View the slides [here](https://www.slideshare.net/GetPostman/postman-an-introduction-for-testers-250144865).**\n\nAt the end of this session, you'll walk away with all the basic skills you need to get started with Postman.  \n✅  Send a request and inspect a response.  \n✅  Use a test snippet.  \n✅  Write custom tests.  \n✅  Extract data from one request to use in another with variables.  \n✅  Save and run tests as collections.  \n✅  Explain different types of tests that can be written in Postman.  \n\n## Join the the Postman Space Camp Series!\nPostman Space Camp is a a series of educational sessions. Each lesson is taught by your favorite Postmanauts. [Sign up to be notified about upcoming sessions](https://www.postman.com/events/postman-space-camp/).\n\n## Additional Resources\nFeeling stuck or want to dig deeper into specific topics? We've got you covered:\n- **[Intro to writing tests](https://www.postman.com/postman/workspace/postman-team-collections/collection/1559645-13bd44c4-94ec-420a-8390-8ff44b60f14d?ctx=documentation)** - A collection containing examples of tests that you can use to automate your testing process.\n- **[Blog post: Writing tests in Postman](https://blog.postman.com/writing-tests-in-postman/)** - A blog post walking you through writing tests in Postman. From using basic test snippets to CI / CD integrations, this post has you covered.\n- **[Writings Tests - documentation](https://www.getpostman.com/docs/v6/postman/scripts/test_scripts)** - Our Learning Center is full of resources and this specific section covers everything you need to know about getting started writing tests.\n- **[Test script examples - documentation](https://learning.postman.com/docs/writing-scripts/script-references/test-examples/)** - This Learning Center resource covers common assertion examples as well as advanced testing examples.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17951538"
+	},
+	"item": [
+		{
+			"name": "Library API Reference",
+			"item": [
+				{
+					"name": "books",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"})\r",
+									"\r",
+									"pm.test('Successful response code should be 200 or 201', () => {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([\r",
+									"        200,\r",
+									"        201\r",
+									"    ]);\r",
+									"})\r",
+									"\r",
+									"pm.test('Status code message is OK', function () {\r",
+									"    pm.response.to.have.status('OK');\r",
+									"})\r",
+									"\r",
+									"pm.test('Header Content-Type is present', function () {\r",
+									"    pm.response.to.have.header('Content-Type');\r",
+									"})\r",
+									"\r",
+									"pm.test('Content-Type should contain JSON Data', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"})\r",
+									"\r",
+									"pm.test('Response time is less than 3000ms', function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"})\r",
+									"\r",
+									"pm.test('API response contains valid author name', () => {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response[0].author).to.not.be.empty;\r",
+									"})\r",
+									"\r",
+									"pm.test('Test property value of the JSON response for author, title, year of published', () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    for (let i = 0; i < jsonData.length; i++) {\r",
+									"        pm.expect(jsonData[i].author).to.include( 'Elif Shafak');\r",
+									"   \r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test('Test data type of the JSON response schema id, genre', () => {\r",
+									"    for (let i = 0; i < jsonData.length; i++) {\r",
+									"        pm.expect(jsonData[i].yearPublished).to.be.a('number');\r",
+									"        pm.expect(jsonData[i].genre).to.be.a('string');\r",
+									"        pm.expect(jsonData[i].id).to.be.a('string');\r",
+									"    }\r",
+									"})\r",
+									"\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "borges",
+									"description": "a search string to be matched against author/title (example: borges). Case insensitive, partial match OK.",
+									"disabled": true
+								},
+								{
+									"key": "checkedOut",
+									"value": "false",
+									"description": "true/false",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "fiction",
+									"description": "filter by genre (case-insensitive, exact match)",
+									"disabled": true
+								},
+								{
+									"key": "id",
+									"value": "090078601",
+									"disabled": true
+								}
+							]
+						},
+						"description": "Returns all books in the library database. \n\nOptional filters can be passed as query parameters."
+					},
+					"response": [
+						{
+							"name": "books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "borges",
+											"description": "a search string to be matched against author/title (example: borges). Case insensitive, partial match OK.",
+											"disabled": true
+										},
+										{
+											"key": "checkedOut",
+											"value": "false",
+											"description": "true/false",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "fiction",
+											"description": "filter by genre (case-insensitive, exact match)",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 12 Jun 2021 00:41:42 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "4503"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"1197-eLah3rmGpEn/V/gcfnJ7iyv+Foo\""
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"title\": \"Ficciones\",\n        \"author\": \"Jorge Luis Borges\",\n        \"id\": \"ZUST9JFx-Sd9X0k\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1944,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Dust Tracks on a Road\",\n        \"author\": \"Zora Neale Hurston\",\n        \"id\": \"bJmPVX5oFzAQJwI\",\n        \"genre\": \"biography\",\n        \"yearPublished\": 1942,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Crime and Punishment\",\n        \"author\": \"Fyodor Dostoyevsky\",\n        \"id\": \"T1NwXSmVxnlxoeG\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1866,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Domain-Driven Design: Tackling Complexity in the Heart of Software\",\n        \"author\": \"Eric Evans\",\n        \"id\": \"hHNwXjmjxnlxooP\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2003,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"The Tale of Genji\",\n        \"author\": \"Murasaki Shikibu\",\n        \"id\": \"rclHV3DLWbJmquK\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1021,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Patterns of Enterprise Application Architecture\",\n        \"author\": \"Martin Fowler\",\n        \"id\": \"uTYYlzvCQsaaSwj\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2002,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Competing Against Luck: The Story of Innovation and Customer Choice\",\n        \"author\": \"Clayton Christensen, Taddy Hall, Karen Dillon, David Duncan\",\n        \"id\": \"rebHV3JhWbJmcca\",\n        \"genre\": \"business\",\n        \"yearPublished\": 2016,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Beyond Violence\",\n        \"author\": \"Jiddu Krishnamurti\",\n        \"id\": \"pclHVVVqLWbJmqur\",\n        \"genre\": \"philosophy\",\n        \"yearPublished\": 1973,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems\",\n        \"author\": \"Martin Kleppmann\",\n        \"id\": \"HbQrRkNjJkalsS\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2017,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Colorless Tsukuru Tazaki and His Years of Pilgrimage\",\n        \"author\": \"Haruki Murakami\",\n        \"id\": \"eclHBBrLWbJmque\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2013,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"A Practical Approach to API Design\",\n        \"author\": \"D. Keith Casey Jr, James Higginbotham\",\n        \"id\": \"jclqjdUdBrLWDDmqp\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2013,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Go Design Patterns\",\n        \"author\": \"Mario Castro Contreras\",\n        \"id\": \"eeRplqnKkshdmqeeE\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2017,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"The Joy Luck Club\",\n        \"author\": \"Amy Tan\",\n        \"id\": \"qqlHBBrLWbJmq_a\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1989,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Anxious People\",\n        \"author\": \"Fredrik Backman\",\n        \"id\": \"MpNoarLWbJTwe\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2019,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Continuous API Management: Making the Right Decisions in an Evolving Landscape\",\n        \"author\": \"Mehdi Medjaoui, Erik Wilde, Ronnie Mitra, Mike Amundsen\",\n        \"id\": \"ZxJksSDasdaO\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2018,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Learning GraphQL\",\n        \"author\": \"Eve Porcello, Alex Banks\",\n        \"id\": \"gqlHBBrLWbJmqgql\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2018,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Masala Lab: The Science of Indian Cooking\",\n        \"author\": \"Krish Ashok\",\n        \"id\": \"shrHcTrLWlJmquti\",\n        \"genre\": \"cooking\",\n        \"yearPublished\": 2020,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Refactoring\",\n        \"author\": \"Kent Beck, Martin Fowler\",\n        \"id\": \"aeSdkfhUSkdhHfo\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 1999,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Consolation of Philosophy\",\n        \"author\": \"Boethius\",\n        \"id\": \"cpopeLmqgixdD\",\n        \"genre\": \"philosophy\",\n        \"yearPublished\": 524,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"A Thousand Splendid Suns\",\n        \"author\": \"Khaled Hosseini\",\n        \"id\": \"qpBhlLWbJmqgg\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2007,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"The Wright Brothers\",\n        \"author\": \"David McCullough \",\n        \"id\": \"HjKaEeYYuiapA\",\n        \"genre\": \"history\",\n        \"yearPublished\": 2007,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"RESTful Web APIs: Services for a Changing World\",\n        \"author\": \"Leonard Richardson, Mike Amundsen, Sam Ruby\",\n        \"id\": \"apilLWbJmqgop\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2013,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Creativity, Inc.\",\n        \"author\": \"Ed Catmull\",\n        \"id\": \"plRHqwwEJmqgoT\",\n        \"genre\": \"business\",\n        \"yearPublished\": 2014,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    }\n]"
+						},
+						{
+							"name": "books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									],
+									"query": [
+										{
+											"key": "search",
+											"value": "borges",
+											"description": "a search string to be matched against author/title (example: borges). Case insensitive, partial match OK.",
+											"disabled": true
+										},
+										{
+											"key": "checkedOut",
+											"value": "false",
+											"description": "true/false",
+											"disabled": true
+										},
+										{
+											"key": "genre",
+											"value": "fiction",
+											"description": "filter by genre (case-insensitive, exact match)",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 22 Aug 2023 19:17:07 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "8774"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"2246-1nHwxL0apS50F2EH4rjVypZq2xY\""
+								}
+							],
+							"cookie": [],
+							"body": "[\n    {\n        \"title\": \"The Pragmatic Programmer: From Journeyman to Master pruebaaa\",\n        \"author\": \"Andy Hunt, Dave Thomas\",\n        \"id\": \"x__iBqmxOpE_aFf\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 1999,\n        \"checkedOut\": true,\n        \"createdAt\": \"2023-08-22 18:50:53\"\n    },\n    {\n        \"title\": \"The Pragmatic Programmer: From Journeyman to Master pruebaaa\",\n        \"author\": \"Andy Hunt, Dave Thomas\",\n        \"id\": \"FHVHCBEaqRf4nas\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 1999,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 18:50:42\"\n    },\n    {\n        \"title\": \"The Pragmatic Programmer: From Journeyman to Master pruebaaa\",\n        \"author\": \"Andy Hunt, Dave Thomas\",\n        \"id\": \"JYX37ih_6iI-MWy\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 1999,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 18:35:59\"\n    },\n    {\n        \"title\": \"Dune\",\n        \"author\": \"Roger Zelazny\",\n        \"id\": \"Ldq9THIjjgkzLEa\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1965,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 18:31:20\"\n    },\n    {\n        \"title\": \"My Book1\",\n        \"author\": \"Myself\",\n        \"id\": \"kAkh9b6n9lNvTqs\",\n        \"genre\": \"Crime\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 18:31:19\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"crh0GJpPNMQnAyr\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 18:30:52\"\n    },\n    {\n        \"title\": \"Dune\",\n        \"author\": \"Roger Zelazny\",\n        \"id\": \"KtdrrFbMBLau1qi\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1965,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 18:30:52\"\n    },\n    {\n        \"title\": \"prueba # 2\",\n        \"author\": \"García Márquez\",\n        \"id\": \"5jvgT8rpIYo8PvI\",\n        \"genre\": \"drama\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 16:55:38\"\n    },\n    {\n        \"title\": \"Test Book 20230822\",\n        \"author\": \"YMMT56\",\n        \"id\": \"41yNBcZSvmbCD91\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1945,\n        \"checkedOut\": true,\n        \"createdAt\": \"2023-08-22 13:49:11\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"uqRS8Z3jcp0VTXv\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": true,\n        \"createdAt\": \"2023-08-22 13:48:31\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"lUq9m5NG1rgUqqX\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": true,\n        \"createdAt\": \"2023-08-22 13:00:26\"\n    },\n    {\n        \"title\": \"Cia2\",\n        \"author\": \"Roger Zelazny\",\n        \"id\": \"tNLt2F6v-oS1mFo\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1965,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 13:00:26\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"AdHT729ar-D9EaY\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 12:01:19\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"B-AyFhsmKGZtAuH\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 11:36:20\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"cSwpTZt7c1d9uCm\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 10:22:13\"\n    },\n    {\n        \"title\": \"Dune\",\n        \"author\": \"Roger Zelazny\",\n        \"id\": \"mdnoPILgRuyy8a1\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1965,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 10:21:36\"\n    },\n    {\n        \"title\": \"Dune\",\n        \"author\": \"Roger Zelazny\",\n        \"id\": \"fu09Qjis8l6dbzj\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1965,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 10:20:13\"\n    },\n    {\n        \"title\": \"テスト44444\",\n        \"author\": \"テストさん\",\n        \"id\": \"XM1cxmddzKfFd49\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 08:04:43\"\n    },\n    {\n        \"title\": \"Postman入門\",\n        \"author\": \"川崎庸市\",\n        \"id\": \"SuusJjflpoMHWhX\",\n        \"genre\": \"サスペンス\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 07:56:29\"\n    },\n    {\n        \"title\": \"テスト222\",\n        \"author\": \"テストさん\",\n        \"id\": \"ivpT_mR23h2DWne\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 07:56:22\"\n    },\n    {\n        \"title\": \"Postman入門\",\n        \"author\": \"川崎庸市\",\n        \"id\": \"ghqYExlOEw7Ex3P\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 07:56:12\"\n    },\n    {\n        \"title\": \"One Hundred Years of Solitude\",\n        \"author\": \"川崎庸市\",\n        \"id\": \"ZWDVwa1rGV7hCpg\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1967,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 07:55:49\"\n    },\n    {\n        \"title\": \"Post Post Mann\",\n        \"author\": \"Kawasaki san\",\n        \"id\": \"VbZVvF5sBpUUOUP\",\n        \"genre\": \"API\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": true,\n        \"createdAt\": \"2023-08-22 07:55:25\"\n    },\n    {\n        \"title\": \"Harry Potter\",\n        \"author\": \"Gabriel García Márquez\",\n        \"id\": \"Yyd5UKOkguTsqV7\",\n        \"genre\": \"Nonfiction\",\n        \"yearPublished\": 2023,\n        \"checkedOut\": false,\n        \"createdAt\": \"2023-08-22 07:55:16\"\n    },\n    {\n        \"title\": \"Ficciones\",\n        \"author\": \"Jorge Luis Borges\",\n        \"id\": \"ZUST9JFx-Sd9X0k\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1944,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Dust Tracks on a Road\",\n        \"author\": \"Zora Neale Hurston\",\n        \"id\": \"bJmPVX5oFzAQJwI\",\n        \"genre\": \"biography\",\n        \"yearPublished\": 1942,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Crime and Punishment\",\n        \"author\": \"Fyodor Dostoyevsky\",\n        \"id\": \"T1NwXSmVxnlxoeG\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1866,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Domain-Driven Design: Tackling Complexity in the Heart of Software\",\n        \"author\": \"Eric Evans\",\n        \"id\": \"hHNwXjmjxnlxooP\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2003,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"The Tale of Genji\",\n        \"author\": \"Murasaki Shikibu\",\n        \"id\": \"rclHV3DLWbJmquK\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1021,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Patterns of Enterprise Application Architecture\",\n        \"author\": \"Martin Fowler\",\n        \"id\": \"uTYYlzvCQsaaSwj\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2002,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Competing Against Luck: The Story of Innovation and Customer Choice\",\n        \"author\": \"Clayton Christensen, Taddy Hall, Karen Dillon, David Duncan\",\n        \"id\": \"rebHV3JhWbJmcca\",\n        \"genre\": \"business\",\n        \"yearPublished\": 2016,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Beyond Violence\",\n        \"author\": \"Jiddu Krishnamurti\",\n        \"id\": \"pclHVVVqLWbJmqur\",\n        \"genre\": \"philosophy\",\n        \"yearPublished\": 1973,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Designing Data-Intensive Applications: The Big Ideas Behind Reliable, Scalable, and Maintainable Systems\",\n        \"author\": \"Martin Kleppmann\",\n        \"id\": \"HbQrRkNjJkalsS\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2017,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Colorless Tsukuru Tazaki and His Years of Pilgrimage\",\n        \"author\": \"Haruki Murakami\",\n        \"id\": \"eclHBBrLWbJmque\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2013,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"A Practical Approach to API Design\",\n        \"author\": \"D. Keith Casey Jr, James Higginbotham\",\n        \"id\": \"jclqjdUdBrLWDDmqp\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2013,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Go Design Patterns\",\n        \"author\": \"Mario Castro Contreras\",\n        \"id\": \"eeRplqnKkshdmqeeE\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2017,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"The Joy Luck Club\",\n        \"author\": \"Amy Tan\",\n        \"id\": \"qqlHBBrLWbJmq_a\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 1989,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Anxious People\",\n        \"author\": \"Fredrik Backman\",\n        \"id\": \"MpNoarLWbJTwe\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2019,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Continuous API Management: Making the Right Decisions in an Evolving Landscape\",\n        \"author\": \"Mehdi Medjaoui, Erik Wilde, Ronnie Mitra, Mike Amundsen\",\n        \"id\": \"ZxJksSDasdaO\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2018,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Learning GraphQL\",\n        \"author\": \"Eve Porcello, Alex Banks\",\n        \"id\": \"gqlHBBrLWbJmqgql\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2018,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Masala Lab: The Science of Indian Cooking\",\n        \"author\": \"Krish Ashok\",\n        \"id\": \"shrHcTrLWlJmquti\",\n        \"genre\": \"cooking\",\n        \"yearPublished\": 2020,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Refactoring\",\n        \"author\": \"Kent Beck, Martin Fowler\",\n        \"id\": \"aeSdkfhUSkdhHfo\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 1999,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Consolation of Philosophy\",\n        \"author\": \"Boethius\",\n        \"id\": \"cpopeLmqgixdD\",\n        \"genre\": \"philosophy\",\n        \"yearPublished\": 524,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"A Thousand Splendid Suns\",\n        \"author\": \"Khaled Hosseini\",\n        \"id\": \"qpBhlLWbJmqgg\",\n        \"genre\": \"fiction\",\n        \"yearPublished\": 2007,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"The Wright Brothers\",\n        \"author\": \"David McCullough \",\n        \"id\": \"HjKaEeYYuiapA\",\n        \"genre\": \"history\",\n        \"yearPublished\": 2007,\n        \"checkedOut\": false,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"RESTful Web APIs: Services for a Changing World\",\n        \"author\": \"Leonard Richardson, Mike Amundsen, Sam Ruby\",\n        \"id\": \"apilLWbJmqgop\",\n        \"genre\": \"computers\",\n        \"yearPublished\": 2013,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    },\n    {\n        \"title\": \"Creativity, Inc.\",\n        \"author\": \"Ed Catmull\",\n        \"id\": \"plRHqwwEJmqgoT\",\n        \"genre\": \"business\",\n        \"yearPublished\": 2014,\n        \"checkedOut\": true,\n        \"createdAt\": \"2021-06-02 17:37:38\"\n    }\n]"
+						}
+					]
+				},
+				{
+					"name": "Get  book by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test('Status code is 200', function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"//Assertion for multiple status code(Successfull response contain 200 or 201 status)\r",
+									"pm.test('Successful response code should be 200 or 201', () => {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([\r",
+									"        200,\r",
+									"        201\r",
+									"    ]);\r",
+									"})\r",
+									"\r",
+									"pm.test('Status code message is OK', function () {\r",
+									"    pm.response.to.have.status('OK');\r",
+									"})\r",
+									"\r",
+									"//Assertion for the header keys\r",
+									"pm.test('Header Content-Type is present', function () {\r",
+									"    pm.response.to.have.header('Content-Type');\r",
+									"})\r",
+									"\r",
+									"//Assertion for the response header keys and values \r",
+									"pm.test('Content-Type should contain JSON Data', () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.include('application/json');\r",
+									"})\r",
+									"\r",
+									"pm.test('Response time is less than 3000ms', function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"})\r",
+									"\r",
+									"pm.test('API response contains valid author name', () => {\r",
+									"    const response = pm.response.json();\r",
+									"    pm.expect(response.author).to.not.be.empty;\r",
+									"})\r",
+									"\r",
+									"//Asserting to validate JSON response values by applying different assertions\r",
+									"pm.test('Test property value of the JSON response for author, title, year of published', () => {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    for (let i = 0; i < jsonData.length; i++) {\r",
+									"        pm.expect(jsonData[i].author).to.include('Elif Shafak');\r",
+									"        pm.expect(jsonData[i].title).to.include('Forty rules of love');\r",
+									"        pm.expect(jsonData[i].yearPublished).to.include(2009);\r",
+									"    }\r",
+									"})\r",
+									"\r",
+									"//Asserting to validate JSON response values data type by applying different assertions\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.test('Test data type of the JSON response schema id, genre', () => {\r",
+									"    for (let i = 0; i < jsonData.length; i++) {\r",
+									"        pm.expect(jsonData[i].yearPublished).to.be.a('number');\r",
+									"        pm.expect(jsonData[i].genre).to.be.a('string');\r",
+									"        pm.expect(jsonData[i].id).to.be.a('string');\r",
+									"    }\r",
+									"})"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/books/e8VGQcGJae1X8dQ",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books",
+								"e8VGQcGJae1X8dQ"
+							]
+						},
+						"description": "Gets a single book by id"
+					},
+					"response": [
+						{
+							"name": "book",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 12 Jun 2021 00:43:31 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "164"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"a4-YbCf8Nx5lqz4LotV0M4P+08vk5Y\""
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"title\": \"Ficciones\",\n    \"author\": \"Jorge Luis Borges\",\n    \"id\": \"ZUST9JFx-Sd9X0k\",\n    \"genre\": \"fiction\",\n    \"yearPublished\": 1944,\n    \"checkedOut\": true,\n    \"createdAt\": \"2021-06-02 17:37:38\"\n}"
+						},
+						{
+							"name": "book",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{baseUrl}}/books/x__iBqmxOpE_aFf",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										"x__iBqmxOpE_aFf"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 22 Aug 2023 19:17:44 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "222"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"de-hFRbDFe3wMunbKxAdyJ3MCC0d7I\""
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"title\": \"The Pragmatic Programmer: From Journeyman to Master pruebaaa\",\n    \"author\": \"Andy Hunt, Dave Thomas\",\n    \"id\": \"x__iBqmxOpE_aFf\",\n    \"genre\": \"computers\",\n    \"yearPublished\": 1999,\n    \"checkedOut\": true,\n    \"createdAt\": \"2023-08-22 18:50:53\"\n}"
+						}
+					]
+				},
+				{
+					"name": "add book",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"pm.test(\"Body matches string\", function () {\r",
+									"    pm.expect(pm.response.text()).to.include(\"OK\");\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Forty rules of love\",\n    \"author\": \"Elif Shafak\",\n    \"id\": \"090078601\",\n    \"genre\": \"an ancient tale of the bond between Rumi, the poet, and his Sufi master, Shams of Tabriz\",\n    \"yearPublished\": 2009\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books"
+							]
+						},
+						"description": "Adds a book to the Library. Books added by users are deleted from the library 12 hours after they have been created."
+					},
+					"response": [
+						{
+							"name": "add book",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"title\": \"One Hundred Years of Solitude\",\n    \"author\": \"Gabriel García Márquez\",\n    \"genre\": \"fiction\",\n    \"yearPublished\": 1967\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 12 Jun 2021 00:44:00 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"10-MxB4y4MLcx6QDsp8b8vgp7iFMFo\""
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"OK\"\n}"
+						}
+					]
+				},
+				{
+					"name": "update book",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"//Assertion for multiple status code(Successfull response contain 200 or 201 status)\r",
+									"pm.test(\"Successful response code should be 200 or 201\", ()=> \r",
+									"{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,403]);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for the header keys\r",
+									"pm.test(\"Header Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//Assertion for the response header keys and values \r",
+									"pm.test(\"Content-Type should contain json Data\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"});\r",
+									"\r",
+									"//Response times differ for each request, therefore you can provide the expected time in the assertion to prevent test failures.\r",
+									"pm.test(\"Response time is less than 6000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"//Assertion on json response data \r",
+									"/*pm.test(\"API response contains elif author name\", () => {\r",
+									"  const response = pm.response.json();\r",
+									"  // the line below checks value of the id field is 2 (number).\r",
+									"  pm.expect(response[0]).to.have.property(\"author\",\"Elif\");\r",
+									"  });\r",
+									"\r",
+									"//Asserting for verifying JSON response schema vlaues by applying different assertions\r",
+									"pm.test(\"Test property value of the JSON response for author, title, year of published\", () => {\r",
+									"const jsonDataa = pm.response.json();\r",
+									" \r",
+									"  pm.expect(jsonDataa[0].author).to.eql(\"Elif Shafak\");\r",
+									"  pm.expect(jsonDataa[0].title).to.eql(\"Forty rules of love\");\r",
+									"  pm.expect(jsonDataa[0].yearPublished).to.eql(2009);\r",
+									"});*/\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"Forty rules of love\",\n    \"author\": \"Elif \",\n    \"id\": \"090078601\",\n    \"genre\": \"an ancient tale of the bond between mulana Rumi(R.A), the poet, and his Sufi master, Shams of Tabriz(R.A)\",\n    \"yearPublished\": 2009\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/books/72ktPhHd_ptY8h9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books",
+								"72ktPhHd_ptY8h9"
+							]
+						},
+						"description": "### Update a book by id\n\nUpdate any of these fields for a book with given `id` via the JSON body: \n\n- `title` (string)\n- `author` (string)\n- `genre` (string)\n- `yearPublished` (integer)\n- `checkedOut` (boolean)\n\n> Note: **Only user-added books can be edited**. Some books are part of the library's canonical collection and cannot be edited."
+					},
+					"response": [
+						{
+							"name": "201 update book",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"checkedOut\": true\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Sat, 12 Jun 2021 00:44:44 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "16"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"10-MxB4y4MLcx6QDsp8b8vgp7iFMFo\""
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"message\": \"OK\"\n}"
+						},
+						{
+							"name": "404 Not Found",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "{{id}}"
+										}
+									]
+								}
+							},
+							"status": "Not Found",
+							"code": 404,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 19:44:14 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "63"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"3f-6PcCQuFZ7rDourB4NtuOy4Tzkb0\""
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"message\": \"Book with id: '{{id}}' not found\"\n}"
+						},
+						{
+							"name": "500 Internal Server Error",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{baseUrl}}/books/:id",
+									"host": [
+										"{{baseUrl}}"
+									],
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "cwSjBa_thjnW3cr"
+										}
+									]
+								}
+							},
+							"status": "Internal Server Error",
+							"code": 500,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 07 Sep 2021 19:45:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "173"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "x-powered-by",
+									"value": "Express"
+								},
+								{
+									"key": "etag",
+									"value": "W/\"ad-Mi5g2mAgHAOl3ETLhu1hjaspW3A\""
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": \"error\",\n    \"message\": \"Empty .update() call detected! Update data does not contain any values to update. This will result in a faulty query. Table: books. Columns: .\"\n}"
+						}
+					]
+				},
+				{
+					"name": "GET Single User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Response status code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for multiple status code(Successfull response contain 200 or 201 status)\r",
+									"pm.test(\"Successful response code should be 200 or 201\", ()=> \r",
+									"{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for status code message\r",
+									"pm.test(\"Status code message is ok \", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"}); \r",
+									"\r",
+									"//Assertion for the header keys\r",
+									"pm.test(\"Header Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//Assertion for the response header keys and values \r",
+									"pm.test(\"Content-Type should contain json Data\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"});\r",
+									"\r",
+									"//Response times differ for each request, therefore you can provide the expected time in the assertion to prevent test failures.\r",
+									"pm.test(\"Response time is less than 3000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"//Assertion on json response data \r",
+									"pm.test(\"API response contains new customer ID\", () => {\r",
+									"  const response = pm.response.json();\r",
+									"  // the line below checks value of the id field is 2 (number).\r",
+									"  pm.expect(response).to.not.have.property(\"id\", 5);\r",
+									"  });\r",
+									"\r",
+									"//Asserting for verifying JSON response schema vlaues by applying different assertions\r",
+									"pm.test(\"Test property value of the JSON response for id, email, first name and avatar \", () => {\r",
+									"const jsonDataa = pm.response.json();\r",
+									"  pm.expect(jsonDataa.data.id).to.eql(2);\r",
+									"  pm.expect(jsonDataa.data.email).to.eql(\"janet.weaver@reqres.in\");\r",
+									"  pm.expect(jsonDataa.data.first_name).to.eql(\"Janet\");\r",
+									"  pm.expect(jsonDataa.data.avatar).to.eql(\"https://reqres.in/img/faces/2-image.jpg\");\r",
+									"});\r",
+									"\r",
+									"//Asserting for verifying JSON response schema data types by applying different assertions\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.test(\"Test data type of the Json response schema , id, email and last_name \", () => {\r",
+									"  pm.expect(jsonData.data.id).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData.data.last_name).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.data.email).to.be.a(\"string\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"data\": {\r\n        \"id\": 2,\r\n        \"email\": \"janet.weaver@reqres.in\",\r\n        \"first_name\": \"Janet\",\r\n        \"last_name\": \"Weaver\",\r\n        \"avatar\": \"https://reqres.in/img/faces/2-image.jpg\"\r\n    },\r\n    \"support\": {\r\n        \"url\": \"https://reqres.in/#support-heading\",\r\n        \"text\": \"To keep ReqRes free, contributions towards server costs are appreciated!\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://reqres.in/api/users/2",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "https://reqres.in/api/users/2",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://reqres.in/api/users/2",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 22 Aug 2023 09:27:43 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"118-pbdwwFo9SKNhD3Lx5iHJyngpq00\""
+								},
+								{
+									"key": "Via",
+									"value": "1.1 vegur"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "max-age=14400"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "HIT"
+								},
+								{
+									"key": "Age",
+									"value": "1329"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=2swyOfWDmdDSIAVW48t05KLqPs6h9w9kbME6cXDdMpltUppFC%2BsYRc0wm5Yx3i3zu%2F1m1MtlL6MdZuewWY7qbL7%2BdmqcvD%2FgIbS5gm8EYpghO4g00h1Eu08G7A%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Vary",
+									"value": "Accept-Encoding"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "7faa14e2ebb32f18-IAD"
+								},
+								{
+									"key": "Content-Encoding",
+									"value": "br"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"id\": 2,\n        \"email\": \"janet.weaver@reqres.in\",\n        \"first_name\": \"Janet\",\n        \"last_name\": \"Weaver\",\n        \"avatar\": \"https://reqres.in/img/faces/2-image.jpg\"\n    },\n    \"support\": {\n        \"url\": \"https://reqres.in/#support-heading\",\n        \"text\": \"To keep ReqRes free, contributions towards server costs are appreciated!\"\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "Create User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Response status code should be 200\r",
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for multiple status code(Successfull response contain 200 or 201 status)\r",
+									"pm.test(\"Successful response code should be 200 or 201\", ()=> \r",
+									"{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for status code message\r",
+									"pm.test(\"Status code message is ok \", function () {\r",
+									"    pm.response.to.have.status(\"Created\");\r",
+									"}); \r",
+									"\r",
+									"//Assertion for the header keys\r",
+									"pm.test(\"Header Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//Assertion for the response header keys and values \r",
+									"pm.test(\"Content-Type should contain json Data\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"});\r",
+									"\r",
+									"//Response times differ for each request, therefore you can provide the expected time in the assertion to prevent test failures.\r",
+									"pm.test(\"Response time is less than 3000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"//Assertion on json response data \r",
+									"pm.test(\"API response contains new customer ID\", () => {\r",
+									"  const response = pm.response.json();\r",
+									"  // the line below checks value of the id field is 2 (number).\r",
+									"  pm.expect(response).to.not.have.property(\"id\", 5);\r",
+									"  });\r",
+									"\r",
+									"//Asserting for verifying JSON response schema vlaues by applying different assertions\r",
+									"pm.test(\"Test property value of the JSON response for  name, job  and id \", () => {\r",
+									"const jsonDataa = pm.response.json();\r",
+									"  pm.expect(jsonDataa.name).to.eql(\"morpheus\");\r",
+									"  pm.expect(jsonDataa.job).to.eql(\"leader\");\r",
+									"  pm.expect(jsonDataa.id).to.not.eql(\"843\");\r",
+									"});\r",
+									"\r",
+									"//Asserting for verifying JSON response schema data types by applying different assertions\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.test(\"Test data type of the Json response schema ,id, name, job \", () => {\r",
+									"  pm.expect(jsonData.name).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.id).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData.job).to.be.a(\"string\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"leader\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://reqres.in/api/users",
+							"protocol": "https",
+							"host": [
+								"reqres",
+								"in"
+							],
+							"path": [
+								"api",
+								"users"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "New Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"name\": \"morpheus\",\r\n    \"job\": \"leader\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://reqres.in/api/users",
+									"protocol": "https",
+									"host": [
+										"reqres",
+										"in"
+									],
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 22 Aug 2023 09:34:22 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json; charset=utf-8"
+								},
+								{
+									"key": "Content-Length",
+									"value": "84"
+								},
+								{
+									"key": "Connection",
+									"value": "keep-alive"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "Express"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Etag",
+									"value": "W/\"54-lbm7sJErRyIYFluBdlQokX5TJx0\""
+								},
+								{
+									"key": "Via",
+									"value": "1.1 vegur"
+								},
+								{
+									"key": "CF-Cache-Status",
+									"value": "DYNAMIC"
+								},
+								{
+									"key": "Report-To",
+									"value": "{\"endpoints\":[{\"url\":\"https:\\/\\/a.nel.cloudflare.com\\/report\\/v3?s=65ZzBsYHMYRN5JN24dquYqpaqkY1%2BHgUGQbD9GZ0Jl8GvodZh89Sj8yiOsdbUeDdTCOUzS2Lek6WGEGlYeENICJ%2FxLybnGRjMrFCwF4F1CZEsNwxaykHmCkMdQ%3D%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "NEL",
+									"value": "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}"
+								},
+								{
+									"key": "Server",
+									"value": "cloudflare"
+								},
+								{
+									"key": "CF-RAY",
+									"value": "7faa1e9c3f576fcb-IAD"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"name\": \"morpheus\",\n    \"job\": \"leader\",\n    \"id\": \"514\",\n    \"createdAt\": \"2023-08-22T09:34:22.255Z\"\n}"
+						}
+					]
+				},
+				{
+					"name": "{{baseUrl}}/books",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Response status code should be 200\r",
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for multiple status code(Successfull response contain 200 or 201 status)\r",
+									"pm.test(\"Successful response code should be 200 or 201\", ()=> \r",
+									"{\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201]);\r",
+									"}); \r",
+									"\r",
+									"//Assertion for status code message\r",
+									"pm.test(\"Status code message is ok \", function () {\r",
+									"    pm.response.to.have.status(\"OK\");\r",
+									"}); \r",
+									"\r",
+									"//Assertion for the header keys\r",
+									"pm.test(\"Header Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									"\r",
+									"//Assertion for the response header keys and values \r",
+									"pm.test(\"Content-Type should contain json Data\", () => {\r",
+									"    pm.expect(pm.response.headers.get('Content-Type')).to.eql('application/json; charset=utf-8')\r",
+									"});\r",
+									"\r",
+									"//Response times differ for each request, therefore you can provide the expected time in the assertion to prevent test failures.\r",
+									"pm.test(\"Response time is less than 6000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(3000);\r",
+									"});\r",
+									"\r",
+									"//Assertion on json response data \r",
+									"pm.test(\"API response contains elif author name\", () => {\r",
+									"  const response = pm.response.json();\r",
+									"  // the line below checks value of the id field is 2 (number).\r",
+									"  pm.expect(response[i]).to.have.property(\"author\",\"Elif Shafak\");\r",
+									"  });\r",
+									"\r",
+									"//Asserting for verifying JSON response schema vlaues by applying different assertions\r",
+									"pm.test(\"Test property value of the JSON response for author, title, year of published\", () => {\r",
+									"const jsonDataa = pm.response.json();\r",
+									" \r",
+									"  pm.expect(jsonDataa[i].author).to.eql(\"Elif Shafak\");\r",
+									"  pm.expect(jsonDataa[i].title).to.eql(\"Forty rules of love\");\r",
+									"  pm.expect(jsonDataa[i].yearPublished).to.eql(2009);\r",
+									"});\r",
+									"\r",
+									"//Asserting for verifying JSON response schema data types by applying different assertions\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.test(\"Test data type of the Json response schema id, genre\", () => {\r",
+									"  pm.expect(jsonData[i].yearPublished).to.be.a(\"number\");\r",
+									"  pm.expect(jsonData[i].genre).to.be.a(\"string\");\r",
+									"  pm.expect(jsonData[i].id).to.be.a(\"string\");\r",
+									"\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/books",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"books"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "borges",
+									"description": "a search string to be matched against author/title (example: borges). Case insensitive, partial match OK.",
+									"disabled": true
+								},
+								{
+									"key": "checkedOut",
+									"value": "false",
+									"description": "true/false",
+									"disabled": true
+								},
+								{
+									"key": "genre",
+									"value": "fiction",
+									"description": "filter by genre (case-insensitive, exact match)",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"description": "This is an API reference for the Library API used in API 101. You can see the Glitch code for the API [here](https://glitch.com/edit/#!/postman-library-api).\n\nThis folder will be used to demonstrate the various types of unit testing that be done in Postman. By using code snippets and writing custom tests in the Tests tab, we can test elements of the response to ensure they come back as expected. This could be status code, headers, elements of the response body, etc.\n\nThe `pm.expect` method allows you to write assertions on your response data using [ChaiJS expect BDD](https://www.chaijs.com/api/bdd/) syntax. More information on writing tests is available [here](https://learning.postman.com/docs/writing-scripts/test-scripts/)."
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://postman-library-api.glitch.me"
+		}
+	]
+}
